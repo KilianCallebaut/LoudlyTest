@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.apiContent.layoutManager = LinearLayoutManager(this)
 
         binding.apiContent.addOnScrollListener(
-            object: RecyclerView.OnScrollListener() {
+            object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
 
@@ -45,7 +45,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createRequest() {
-        val url = "https://api.github.com/search/repositories?q=tetris&per_page=10&page=$count"
+        val query = if (binding.searchField.text.toString()
+                .isEmpty()
+        ) "tetris" else binding.searchField.text.toString()
+        val url = "https://api.github.com/search/repositories?q=$query&per_page=10&page=$count"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 repoAdapter.add_repos_last(jsonResponse)
                 count += 1
             },
-            Response.ErrorListener {error ->
+            Response.ErrorListener { error ->
                 Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
             }
         )
