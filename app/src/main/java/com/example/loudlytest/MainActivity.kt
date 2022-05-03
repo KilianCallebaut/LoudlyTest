@@ -15,7 +15,7 @@ import com.example.loudlytest.requests.RepoRequestQueue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var count = 0
+    private var count = 1
     private val repoAdapter = RepoAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createRequest(view: View) {
-        val url = "https://api.github.com/search/repositories?q=tetris&per_page=10"
+        val url = "https://api.github.com/search/repositories?q=tetris&per_page=10&page=$count"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
                 val jsonResponse = response.getJSONArray("items")
-                Toast.makeText(this.applicationContext, jsonResponse.length().toString(), Toast.LENGTH_LONG).show()
                 repoAdapter.add_repos_last(jsonResponse)
+                count += 1
             },
             Response.ErrorListener {error ->
                 Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show()
