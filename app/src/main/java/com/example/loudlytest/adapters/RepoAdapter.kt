@@ -1,5 +1,6 @@
 package com.example.loudlytest.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,12 @@ class RepoAdapter(private val repoItems: MutableList<RepoItem>) :
             loginOwner.text = curRepo.loginOwner
             size.text = curRepo.size
         }
+        if (curRepo.has_wiki) {
+            holder.itemView.repoItemLayout.setBackgroundColor(Color.parseColor("#FFC107"))
+        } else {
+            holder.itemView.repoItemLayout.setBackgroundColor(Color.WHITE)
+
+        }
     }
 
     override fun getItemCount(): Int {
@@ -51,7 +58,8 @@ class RepoAdapter(private val repoItems: MutableList<RepoItem>) :
                 RepoItem(
                     repoObject.getString("name"),
                     repoObject.getJSONObject("owner").getString("login"),
-                    repoObject.getInt("size").toString()
+                    repoObject.getInt("size").toString(),
+                    repoObject.getBoolean("has_wiki")
                 )
             )
         }
