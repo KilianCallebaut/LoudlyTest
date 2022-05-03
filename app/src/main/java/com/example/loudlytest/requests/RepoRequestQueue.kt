@@ -6,6 +6,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
 class RepoRequestQueue constructor(context: Context) {
+    // Make RequestQueue a singleton object, just to be sure
+
     companion object {
         @Volatile
         private var INSTANCE: RepoRequestQueue? = null

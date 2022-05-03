@@ -27,12 +27,14 @@ class RepoAdapter(private val repoItems: MutableList<RepoItem>) :
     }
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
+        // Bind view for every repo entry
         val curRepo = repoItems[position]
         holder.itemView.apply {
             repoName.text = curRepo.repoName
             loginOwner.text = curRepo.loginOwner
             size.text = curRepo.size
         }
+        // Change background color to yellow if the repo has a wiki
         if (curRepo.has_wiki) {
             holder.itemView.repoItemLayout.setBackgroundColor(Color.parseColor("#FFC107"))
         } else {
@@ -45,12 +47,9 @@ class RepoAdapter(private val repoItems: MutableList<RepoItem>) :
         return repoItems.size
     }
 
-    fun add_repos(index: Int, data: List<RepoItem>) {
-        repoItems.addAll(index, data)
-        notifyItemRangeChanged(index, data.size)
-    }
 
     fun add_repos_last(data: JSONArray) {
+        // append JSON data to the end of the list
         val index = repoItems.size
         for (i in 0 until data.length()) {
             val repoObject = data.getJSONObject(i)
@@ -63,6 +62,7 @@ class RepoAdapter(private val repoItems: MutableList<RepoItem>) :
                 )
             )
         }
+        // update the observer list on screen
         notifyItemRangeChanged(index, data.length())
     }
 

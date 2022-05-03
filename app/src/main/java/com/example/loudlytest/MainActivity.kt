@@ -27,9 +27,11 @@ class MainActivity : AppCompatActivity() {
             createRequest()
         }
 
+        // Create the adapter and layoutmanager necessary for the recyclerview
         binding.apiContent.adapter = repoAdapter
         binding.apiContent.layoutManager = LinearLayoutManager(this)
 
+        // Add onScrollListener function checking if the screen is scrolled to the bottom
         binding.apiContent.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -45,10 +47,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createRequest() {
+        // Create the getter request for the api call
+
+        // Get the query value or use the default 'tetris'
         val query = if (binding.searchField.text.toString()
                 .isEmpty()
         ) "tetris" else binding.searchField.text.toString()
         val url = "https://api.github.com/search/repositories?q=$query&per_page=10&page=$count"
+
+        // Make the api request fetching the JSON object
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
