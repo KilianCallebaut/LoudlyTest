@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -23,14 +24,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.SearchButton.setOnClickListener {
-            createRequest(binding.apiContent)
+            createRequest()
         }
 
         binding.apiContent.adapter = repoAdapter
         binding.apiContent.layoutManager = LinearLayoutManager(this)
+
+        binding.apiContent.addOnScrollListener(
+            object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    if (!recyclerView.canScrollVertically(1)) {
+                        createRequest()
+                    }
+                }
+            }
+
+        )
     }
 
-    private fun createRequest(view: View) {
+    private fun createRequest() {
         val url = "https://api.github.com/search/repositories?q=tetris&per_page=10&page=$count"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
